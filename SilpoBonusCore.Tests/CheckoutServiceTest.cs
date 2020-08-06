@@ -6,41 +6,58 @@ namespace SilpoBonusCore.Tests
 {
     public class CheckoutServiceTest
     {
-        [Fact]
-        public void CloseCheckWithOneProduct()
-        {
-            CheckoutService checkoutService = new CheckoutService();
+        private Product milk_7;
+        private Product bread_3;
+        private CheckoutService checkoutService;
+
+        
+        void SetUp() {
+            checkoutService = new CheckoutService();
             checkoutService.OpenCheck();
-            checkoutService.AddProduct(new Product(7, "Milk"));
+            milk_7 = new Product(7, "Milk");
+            bread_3 = new Product(3, "Bred");
+        }
+        [Fact]
+        void CloseCheckWithOneProduct()
+        {
+            SetUp();
+            checkoutService.AddProduct(milk_7);
             Check check = checkoutService.CloseCheck();
 
             Assert.Equal(check.getTotalCost(), 7);
         }
 
         [Fact]
-        public void CloseCheckWithTwoProduct()
+        void CloseCheckWithTwoProduct()
         {
-            CheckoutService checkoutService = new CheckoutService();
-            checkoutService.OpenCheck();
-            checkoutService.AddProduct(new Product(7, "Milk"));
-            checkoutService.AddProduct(new Product(3, "Bred"));
+            SetUp();
+            checkoutService.AddProduct(milk_7);
+            checkoutService.AddProduct(bread_3);
             Check check = checkoutService.CloseCheck();
             Assert.Equal(check.getTotalCost(), 10);
         }
 
         [Fact]
-        public void AddProductWhenCheckIsClosedOpensNewCheck() 
+        void AddProductWhenCheckIsClosedOpensNewCheck() 
         {
-            CheckoutService checkoutService = new CheckoutService();
-            checkoutService.OpenCheck();
-            checkoutService.AddProduct(new Product(7, "Milk"));
+            SetUp();
+            checkoutService.AddProduct(milk_7);
             Check milkCheck = checkoutService.CloseCheck();
             Assert.Equal(milkCheck.getTotalCost(), 7);
 
-            checkoutService.AddProduct(new Product(3, "Bread"));
+            checkoutService.AddProduct(bread_3);
             Check bredCheck = checkoutService.CloseCheck();
             Assert.Equal(bredCheck.getTotalCost(), 3);
 
         }
+        [Fact]
+        void CloseCheckCalcTotalPoints() {
+            SetUp();
+            checkoutService.AddProduct(milk_7);
+            checkoutService.AddProduct(bread_3);
+            Check Check = checkoutService.CloseCheck();
+            Assert.Equal(Check.getTotalPoints(), 10);
+        }
+        
     }
 }
