@@ -7,57 +7,87 @@ namespace SilpoBonusCore.Tests
     public class CheckoutServiceTest
     {
         private Product milk_7;
-        private Product bread_3;
+        private Product bred_3;
         private CheckoutService checkoutService;
 
-        
-        void SetUp() {
+        public CheckoutServiceTest()
+        {
             checkoutService = new CheckoutService();
+            milk_7 = new Product(7, "Milk", Category.MILK);
+            bred_3 = new Product(3, "Bred");
             checkoutService.OpenCheck();
-            milk_7 = new Product(7, "Milk");
-            bread_3 = new Product(3, "Bred");
         }
+
         [Fact]
-        void CloseCheckWithOneProduct()
+        void CloseCheck_WithOneProduct()
         {
-            SetUp();
             checkoutService.AddProduct(milk_7);
             Check check = checkoutService.CloseCheck();
 
-            Assert.Equal(check.getTotalCost(), 7);
+            Assert.Equal(check.GetTotalCost(), 7);
         }
 
         [Fact]
-        void CloseCheckWithTwoProduct()
+        void CloseChec_kWithTwoProduct()
         {
-            SetUp();
             checkoutService.AddProduct(milk_7);
-            checkoutService.AddProduct(bread_3);
+            checkoutService.AddProduct(bred_3);
             Check check = checkoutService.CloseCheck();
-            Assert.Equal(check.getTotalCost(), 10);
+            Assert.Equal(check.GetTotalCost(), 10);
         }
 
         [Fact]
-        void AddProductWhenCheckIsClosedOpensNewCheck() 
+        void AddProduct_WhenCheckIsClosedOpensNewCheck() 
         {
-            SetUp();
             checkoutService.AddProduct(milk_7);
             Check milkCheck = checkoutService.CloseCheck();
-            Assert.Equal(milkCheck.getTotalCost(), 7);
+            Assert.Equal(milkCheck.GetTotalCost(), 7);
 
-            checkoutService.AddProduct(bread_3);
+            checkoutService.AddProduct(bred_3);
             Check bredCheck = checkoutService.CloseCheck();
-            Assert.Equal(bredCheck.getTotalCost(), 3);
+            Assert.Equal(bredCheck.GetTotalCost(), 3);
 
         }
         [Fact]
-        void CloseCheckCalcTotalPoints() {
-            SetUp();
+        void CloseCheck_CalcTotalPoints() {
             checkoutService.AddProduct(milk_7);
-            checkoutService.AddProduct(bread_3);
-            Check Check = checkoutService.CloseCheck();
-            Assert.Equal(Check.getTotalPoints(), 10);
+            checkoutService.AddProduct(bred_3);
+            Check check = checkoutService.CloseCheck();
+            Assert.Equal(check.GetTotalPoints(), 10);
         }
-        
+
+        [Fact]
+        void UseOffer_AddOfferPoints() {
+            checkoutService.AddProduct(milk_7);
+            checkoutService.AddProduct(bred_3);
+
+            checkoutService.UseOffer(new AnyGoodsOffer(6, 2));
+            Check check = checkoutService.CloseCheck();
+            
+            Assert.Equal(check.GetTotalPoints(), 12);
+        }
+
+        [Fact]
+        void UseOffer_WhenCostLessThanRequired_DoNothing() {
+            checkoutService.AddProduct(bred_3);
+
+            checkoutService.UseOffer(new AnyGoodsOffer(6, 2));
+            Check check = checkoutService.CloseCheck();
+
+            Assert.Equal(check.GetTotalPoints(), 3);
+        }
+
+        [Fact]
+        void UseOffer_FactorByCategory() {
+            checkoutService.AddProduct(milk_7);
+            checkoutService.AddProduct(milk_7);
+            checkoutService.AddProduct(bred_3);
+
+            checkoutService.UseOffer(new FactorByCategoryOffer(Category.MILK, 2));
+            Check check = checkoutService.CloseCheck();
+
+            Assert.Equal(check.GetTotalPoints(), 17);
+        }
+
     }
 }
