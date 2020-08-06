@@ -20,19 +20,10 @@ namespace SilpoBonusCore.checkout
             check = null;
             return closedCheck;
         }
-        public void UseOffer(AnyGoodsOffer offer) 
+        public void UseOffer(Offer offer) 
         {
-            if (offer is FactorByCategoryOffer)
-            {
-                FactorByCategoryOffer fOffer = (FactorByCategoryOffer)offer;
-                int points = check.GetCostByCategory(fOffer.category);
-                // check.AddPoints(14);
-                check.AddPoints(offer.points * (fOffer.factor - 1));
-            }
-            if (offer.totalCost <= check.GetTotalCost())
-            {
-                check.AddPoints(offer.points);
-            }
+            offer.apply(check);
+            
             // if (offer in)
         }
     }

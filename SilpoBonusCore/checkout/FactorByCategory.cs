@@ -4,16 +4,21 @@ using System.Linq;
 
 namespace SilpoBonusCore.checkout
 {
-    public class FactorByCategoryOffer : AnyGoodsOffer
+    public class FactorByCategoryOffer : Offer
     {
         public Category category;
         public int factor;
 
-        public FactorByCategoryOffer(Category category, int factor) : base(0, 0)
+        public FactorByCategoryOffer(Category category, int factor)
         {
             this.category = category;
             this.factor = factor;
         }
 
+        public override void apply(Check check)
+        {
+            int points = check.GetCostByCategory(category);
+            check.AddPoints(points * (factor - 1)); 
+        }
     }
 }

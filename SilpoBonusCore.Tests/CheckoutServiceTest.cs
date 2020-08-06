@@ -86,7 +86,7 @@ namespace SilpoBonusCore.Tests
             checkoutService.UseOffer(new FactorByCategoryOffer(Category.MILK, 2));
             Check check = checkoutService.CloseCheck();
 
-            Assert.Equal(check.GetTotalPoints(), 17);
+            Assert.Equal(check.GetTotalPoints(), 31);
         }
 
     }
