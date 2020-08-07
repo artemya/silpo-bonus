@@ -47,7 +47,10 @@ namespace SilpoBonusCore.checkout
         {
             foreach(var offer in offers)
             {
-                offer.apply(this);
+                if (offer.NotOutflow())
+                {
+                    offer.apply(this);
+                }
             }
         }
     }

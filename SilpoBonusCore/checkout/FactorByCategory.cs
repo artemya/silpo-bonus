@@ -9,7 +9,7 @@ namespace SilpoBonusCore.checkout
         public Category category;
         public int factor;
 
-        public FactorByCategoryOffer(Category category, int factor)
+        public FactorByCategoryOffer(Category category, int factor, DateTime outflowDate) : base(outflowDate)
         {
             this.category = category;
             this.factor = factor;
