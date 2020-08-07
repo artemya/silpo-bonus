@@ -1,6 +1,7 @@
 namespace SilpoBonusCore.checkout
 {
     public enum Category {
-        MILK
+        MILK,
+        BRED
     }
 }

@@ -16,15 +16,14 @@ namespace SilpoBonusCore.checkout
         }
         public Check CloseCheck() 
         {
+            check.CheckAndApplyOffers();
             Check closedCheck = check;
             check = null;
             return closedCheck;
         }
         public void UseOffer(Offer offer) 
         {
-            offer.apply(check);
-            
-            // if (offer in)
+            check.UseOffer(offer);
         }
     }
 }

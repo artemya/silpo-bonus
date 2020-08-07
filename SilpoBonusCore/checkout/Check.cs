@@ -7,6 +7,7 @@ namespace SilpoBonusCore.checkout
     public class Check 
     {
         private List<Product> products = new List<Product>();
+        private List<Offer> offers = new List<Offer>();
         private int points = 0;
         public int GetTotalCost() 
         {
@@ -37,5 +38,17 @@ namespace SilpoBonusCore.checkout
                     .Aggregate(0, (a, b) => a + b);
         }
 
+        internal void UseOffer(Offer offer)
+        {
+            offers.Add(offer);
+        }
+
+        internal void CheckAndApplyOffers()
+        {
+            foreach(var offer in offers)
+            {
+                offer.apply(this);
+            }
+        }
     }
 }

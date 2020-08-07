@@ -86,7 +86,25 @@ namespace SilpoBonusCore.Tests
             checkoutService.UseOffer(new FactorByCategoryOffer(Category.MILK, 2));
             Check check = checkoutService.CloseCheck();
 
-            Assert.Equal(check.GetTotalPoints(), 31);
+            Assert.Equal(check.GetTotalPoints(), 34);
+        }
+
+        [Fact]
+        public void useOffers_BeforeClose()
+        {
+            checkoutService.AddProduct(milk_7);
+            checkoutService.AddProduct(bred_3);
+
+            checkoutService.UseOffer(new FactorByCategoryOffer(Category.MILK, 2));
+
+            checkoutService.AddProduct(milk_7);
+
+            checkoutService.UseOffer(new FactorByCategoryOffer(Category.BRED, 3));
+
+            checkoutService.AddProduct(new Product(3, "Bred", Category.BRED));
+            Check check = checkoutService.CloseCheck();
+
+            Assert.Equal(check.GetTotalPoints(), 43);
         }
 
     }
